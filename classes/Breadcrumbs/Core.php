@@ -136,6 +136,9 @@ abstract class Breadcrumbs_Core {
             $pages[$last_page] .= $query_string;
         }
 
+        // Page URI
+        $page_uri = array();
+
         foreach ($pages as $page)
         {
             if (empty($page))
@@ -152,6 +155,12 @@ abstract class Breadcrumbs_Core {
                 // The last page is active
                 $active = TRUE;
             }
+
+            // Add to page URI
+            $page_uri[] = $page;
+
+            // Build full URI
+            $page = implode('/', $page_uri);
 
             // Add page
             $this->add($page, $active);

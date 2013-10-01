@@ -50,18 +50,18 @@ This means when the URI is parsed and a **search** or **type** query parameter i
 An URI like **welcome/index?search=keyword&limit=100** would result in a breadcrumb with these two pages:
 
 - welcome
-- index?search=keyword
+- welcome/index?search=keyword
 
 If `query_keys` was to `FALSE` the above link would result in a breadcrumb trail consisting of these two pages:
 
 - welcome
-- index
+- welcome/index
 
 It is also possible to generate a breadcrumb trail with this setting that would contain these three pages:
 
 - welcome
-- index
-- index?search=keyword
+- welcome/index
+- welcome/index?search=keyword
 
 To achieve this read the **Page configuration** part.
 
@@ -71,21 +71,21 @@ The `pages` array contains the configuration for the different pages. If the bre
 For example an URI like **welcome/index** means two pages:
 
 - welcome
-- index
+- welcome/index
 
 The module looks for these two pages in the `pages` configuration (searching for the keys as the name of the pages), for example you can set the configuration for these like this:
 
     'pages' => array(
-        'welcome' => array(
+        'welcome'       => array(
             'exclude' => TRUE,
         ),
-        'index' => array(
+        'welcome/index' => array(
             'title' => 'Index page',
             'url'   => Route::url('default', array('controller' => 'welcome', 'action' => 'index')),
         ),
     ),
 
-The above configuration would mean that the **welcome** page would never be part of the breadcrumbs, while the **index** page would have a link titled **Index page**, using the specified URL.
+The above configuration would mean that the **welcome** page would never be part of the breadcrumbs, while the **welcome/index** page would have a link titled **Index page**, using the specified URL.
 
 #### Root page
 
@@ -104,40 +104,40 @@ config can be customized to your liking:
 If you set up to include query parameters in the URI, then you can have configuration for those pages like this:
 
     'pages' => array(
-        'welcome' => array(
+        'welcome'                      => array(
             'exclude' => TRUE,
         ),
-        'index' => array(
+        'welcome/index'                => array(
             'title' => 'Index page',
             'url'   => Route::url('default', array('controller' => 'welcome', 'action' => 'index')),
         ),
-        'index?search=keyword' => array(
+        'welcome/index?search=keyword' => array(
             'title' => 'Search',
             'url'   => Route::url('default', array('controller' => 'welcome', 'action' => 'index')).'?search=keyword',
         ),
     ),
 
-This way the URI with the **search=keyword** query string can have a different breadcrumb trail. If you want to include **index** and **index?search=keyword** as well in the breadcrumbs you can set a `parent` option in the array as follows:
+This way the URI with the **search=keyword** query string can have a different breadcrumb trail. If you want to include **welcome/index** and **welcome/index?search=keyword** as well in the breadcrumbs you can set a `parent` option in the array as follows:
 
     'pages' => array(
-        'welcome' => array(
+        'welcome'                      => array(
             'exclude' => TRUE,
         ),
-        'index' => array(
+        'welcome/index'                => array(
             'title' => 'Index page',
             'url'   => Route::url('default', array('controller' => 'welcome', 'action' => 'index')),
         ),
-        'index?search=keyword' => array(
+        'welcome/index?search=keyword' => array(
             'title'  => 'Search',
             'url'    => Route::url('default', array('controller' => 'welcome', 'action' => 'index')).'?search=keyword',
-            'parent' => 'index',
+            'parent' => 'welcome/index',
         ),
     ),
 
 Now the breadcrumb trail would include these pages:
 
-- index
-- index?search=keyword
+- welcome/index
+- welcome/index?search=keyword
 
 ## Usage
 All you have to do is call the `Breadcrumbs::factory();` method, where you can supply the name of the configuration to use or some custom options in an array:
