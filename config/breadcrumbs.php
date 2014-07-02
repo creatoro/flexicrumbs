@@ -2,7 +2,7 @@
 
 return array(
     /**
-     * Add configurations for differenc breadcrumb trails
+     * Add configurations for different breadcrumb trails
      */
     'configurations'    => array(
         // Default configuration
