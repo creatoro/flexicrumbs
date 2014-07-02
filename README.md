@@ -52,7 +52,7 @@ An URI like **welcome/index?search=keyword&limit=100** would result in a breadcr
 - welcome
 - welcome/index?search=keyword
 
-If `query_keys` was to `FALSE` the above link would result in a breadcrumb trail consisting of these two pages:
+If `query_keys` was set to `FALSE` the above link would result in a breadcrumb trail consisting of these two pages:
 
 - welcome
 - welcome/index
@@ -148,7 +148,7 @@ OR
     Breadcrumbs::factory(array('auto' => FALSE));
 
 ### Adding breadcrumbs manually
-To add breadcrumbs manually first you should create an array in the configuration for the breadcrumb, for example:
+The first way of adding breacdrumbs manually is to create an array in the configuration for the breadcrumb, for example:
 
     'pages' => array(
         'custom_page_name' => array(
@@ -165,6 +165,20 @@ Now you can add this breadcrumb like this:
     // Add breadcrumb manually
     $breadcrumbs->add('custom_page_name');
 
+The alternative way to add a breadcrumb manually is to supply the configuration options when adding the breadcrumb, for example:
+
+    // Breadcrumbs
+    $breadcrumbs = Breadcrumbs::factory();
+
+    // Add breadcrumb manually along with configuration options
+    $breadcrumbs->add(array(
+        'title'  => 'This was added manually',
+        'url'    => URL::site('contact'),
+        'parent' => '/home',
+    ));
+
+This way you can overwrite the pre-set settings in the config for the certain page or you can do things like setting the breadcrumb title using methods.
+
 You can supply two more parameters when adding a breadcrumb:
 
 - is it an active breadcrumb / page (boolean)
@@ -174,6 +188,15 @@ For example:
 
     // Add a currently active breadcrumb to the 4th position manually
     $breadcrumbs->add('custom_page_name', TRUE, 3);
+
+Or
+
+    // Add an inactive breadcrumb with configuration to the 7th position manually
+    $breadcrumbs->add(array(
+        'title'  => 'A manually added breadcrumb in the 7th position',
+        'url'    => URL::site('contact'),
+        'parent' => '/home',
+    ), FALSE, 6);
 
 ### Rendering the HTML code
 To render the HTML code call the `render()` method. For example:

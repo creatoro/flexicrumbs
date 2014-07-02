@@ -177,7 +177,7 @@ abstract class Breadcrumbs_Core {
     /**
      * Adds breadcrumb
      *
-     * @param   string  $page      the page from URI
+     * @param   mixed   $page      array with config or the page URI
      * @param   bool    $active    is this page active
      * @param   NULL    $position  the position of the breadcrumb
      * @return          $this
@@ -186,12 +186,26 @@ abstract class Breadcrumbs_Core {
      */
     public function add($page, $active = FALSE, $position = NULL)
     {
-        // Set up breadcrumb
-        $breadcrumb = Arr::get($this->pages, $page, array());
+        if (is_array($page))
+        {
+            // Look for breadcrumb configuration or fallback to supplied array
+            $breadcrumb = Arr::get($this->pages, $page['url'], $page);
 
-        // Add title and URL if missing
-        $breadcrumb['title'] = Arr::get($breadcrumb, 'title', $page);
-        $breadcrumb['url']   = Arr::get($breadcrumb, 'url', URL::site($page, 'http'));
+            // The page might contain data to set or override breadcrumb data
+            $breadcrumb['url']     = Arr::get($page, 'url', Arr::get($breadcrumb, 'url'));
+            $breadcrumb['title']   = Arr::get($page, 'title', Arr::get($breadcrumb, 'title'));
+            $breadcrumb['exclude'] = Arr::get($page, 'exclude', Arr::get($breadcrumb, 'exclude'));
+            $breadcrumb['parent']  = Arr::get($page, 'parent', Arr::get($breadcrumb, 'parent'));
+        }
+        else
+        {
+            // Set up breadcrumb
+            $breadcrumb = Arr::get($this->pages, $page, array());
+
+            // Add URL and title if missing
+            $breadcrumb['url']   = Arr::get($breadcrumb, 'url', URL::site($page, 'http'));
+            $breadcrumb['title'] = Arr::get($breadcrumb, 'title', $page);
+        }
 
         // Add active setting
         $breadcrumb['active'] = $active;
